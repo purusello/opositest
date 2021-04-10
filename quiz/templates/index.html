@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Aplicación OposiTEST</h1>
+{% if user.is_authenticated %}
+    <div style="background-image: url('imagen_test.jpg');">
+    <h3 class="alert alert-success" style="...">Hola {{user.username}}</h3>
+    <p class ="lead"> Sigue mejorando ¡¡¡ Mucho ánimo !!! </a> </p>
+
+{% endif %}
+    <br>
+    <hr>
+    <p class ="foot"> Esta aplicación está basada en el código Tom Walkers que puedes descargar en <a href="https://github.com/tomwalker/django_quiz"> https://github.com/tomwalker/django_quiz</a> </p>
+    <p class ="foot"> Modificada por Josejo Carrasco para el grupo T.C.E. 2019-2020 </p>
+
+
+{% endblock  %}

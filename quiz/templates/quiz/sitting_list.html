@@ -1,9 +1,14 @@
 {% extends 'base.html' %}
 {% load i18n %}
+
 {% block title %}{% trans "All Quizzes" %}{% endblock %}
+
+
 
 {% block content %}
 <h2>{% trans "List of complete exams" %}</h2>
+
+
     {% if sitting_list %}
 
 		<table class="table table-bordered table-striped">
@@ -11,8 +16,18 @@
 		  <thead>
 			<tr>
 			  <th>{% trans "User" %}</th>
-			  <th>{% trans "Quiz" %}</th>
-			  <th>{% trans "Completed" %}</th>
+			  <th>
+			  		<a href="{% url 'quiz_marking_ordering' order='orderquiz' %}">
+						{% trans "Quiz" %}
+
+				    </a>
+
+			  </th>
+			  <th>
+					<a href="{% url 'quiz_marking_ordering' order='orderend' %}">
+						{% trans "Completed" %}
+				    </a>
+			  </th>
 			  <th>{% trans "Score" %}(%)</th>
 			  <th></th>
 			</tr>

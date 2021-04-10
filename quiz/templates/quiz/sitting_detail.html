@@ -30,12 +30,25 @@
 
 	<tr>
       <td>
-        {{ question.content }}
+        {{ question.content|safe }}
         {% if question.figure %}
         <div style="max-width: 100px;"><img src="{{ question.figure.url }}" alt="{{ question.figure }}"/></div>
         {% endif %}
       </td>
-	  <td>{{ question|answer_choice_to_string:question.user_answer }}</td>
+
+
+
+
+		<td>{{ question|answer_choice_to_string:question.user_answer }}</td>
+		<td>
+		{% if question.id in sitting.get_incorrect_questions %}
+			{% for answer in question.get_answers %}
+				{% if answer.correct == True %}
+					{{answer.content}}
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+		</td>
 	  <td>
 		{% if question.id in sitting.get_incorrect_questions %}
 		  <p>{% trans "incorrect" %}</p>
@@ -46,7 +59,11 @@
 	  <td>
 		<form action="" method="POST">{% csrf_token %}
 		  <input type=hidden name="qid" value="{{ question.id }}">
-		  <button type="submit" class="btn btn-warning">{% trans "Toggle whether correct" %}</button>
+		 {% if question.id in sitting.get_incorrect_questions %}
+		  	<button type="submit" class="btn btn-warning">{% trans "Toggle whether correct" %}</button>
+		 {% else %}
+			<button type="submit" class="btn btn-err">{% trans "Toggle whether correct" %}</button>
+		 {% endif %}
 		</form>
 	  </td>
 	</tr>

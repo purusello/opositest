@@ -1,0 +1,2 @@
+{% for row in data %}{{ row.pregunta|addslashes }};{{ row.r1|addslashes }};{{ row.r2|addslashes }};{{ row.r3|addslashes }};{{ row.r4|addslashes }};{{ row.correcta|addslashes }};{{ row.explicacion|addslashes }}
+{% endfor %}

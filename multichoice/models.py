@@ -1,8 +1,12 @@
 from __future__ import unicode_literals
-from django.utils.encoding import python_2_unicode_compatible
+#from django.utils.encoding import python_2_unicode_compatible
+from six import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
 from django.db import models
 from quiz.models import Question
+
+from django.urls import reverse
+from django.contrib.contenttypes.models import ContentType
 
 
 ANSWER_ORDER_OPTIONS = (
@@ -49,6 +53,9 @@ class MCQuestion(Question):
     def answer_choice_to_string(self, guess):
         return Answer.objects.get(id=guess).content
 
+    def get_admin_url(self):
+        content_type = ContentType.objects.get_for_model(self.__class__)
+        return reverse("admin:%s_%s_change" % (content_type.app_label, content_type.model), args=(self.id,))
     class Meta:
         verbose_name = _("Multiple Choice Question")
         verbose_name_plural = _("Multiple Choice Questions")

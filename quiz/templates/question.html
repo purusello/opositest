@@ -21,7 +21,7 @@
   	  <p><small>
 		{% trans "Your answer was" %} </small>
 		<strong>
-		  {{ previous.previous_outcome|yesno:"correct,incorrect" }}
+		  {{ previous.previous_outcome|yesno:"correcta,incorrecta" }}
 		</strong>
 	  </p>
 
@@ -35,7 +35,12 @@
 	</div>
 
 	<hr>
+	<p><strong>{% trans "Modificar pregunta" %}:</strong></p>
+	<div class="well " style="background-color: #fcf8e3;">
+		<p><a href="{{ request.META.HTTP_HOST }}{{ previous.previous_question.get_admin_url }}" target="_blank" > {% trans "Modificar pregunta" %} </a></p>
+	</div>
 
+	<hr>
 {% endif %}
 
 <br />
@@ -50,10 +55,11 @@
 
 <p>
   <small class="muted">{% trans "Question category" %}:</small>
-  <strong>{{ question.category }}</strong>
+  <strong>{{ question.sub_category }}</strong>
 </p>
 
-<p class="lead">{{ question.content }}</p>
+<p class="lead">{{ question.content|safe }}</p>
+
 
 {% if question.figure %}
     <img src="{{ question.figure.url }}" alt="{{ question.content }}" />

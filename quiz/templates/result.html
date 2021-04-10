@@ -11,18 +11,40 @@
   {% if previous.answers %}
 
   <p class="muted"><small>{% trans "The previous question" %}:</small></p>
-  <p>{{ previous.previous_question }}</p>
-  <p>Your answer was
-	<strong>
-	  {{ previous.previous_outcome|yesno:"correct,incorrect" }}
-	</strong>
-  </p>
-  {% include 'correct_answer.html' %}
-  <p><strong>{% trans "Explanation" %}:</strong></p>
-  <div class="well " style="background-color: #fcf8e3;">
-    <p>{{ previous.previous_question.explanation }}</p>
-  </div>
-  <hr>
+  <p>{{ previous.previous_question|safe }}</p>
+
+  {% if previous.previous_outcome %}
+	<div class="alert alert-success">
+  {% else %}
+	<div class="alert alert-warning">
+  {% endif %}
+  	  <p><small>
+		{% trans "Your answer was" %} </small>
+		<strong>
+		  {{ previous.previous_outcome|yesno:"correcta,incorrecta" }}
+		</strong>
+
+
+	  </p>
+
+	</div>
+
+	{% include 'correct_answer.html' %}
+
+	<p><strong>{% trans "Explanation" %}:</strong></p>
+	<div class="well " style="background-color: #fcf8e3;">
+	  <p>{{ previous.previous_question.explanation }}</p>
+	</div>
+
+	<hr>
+
+	<p><strong>{% trans "Modificar pregunta" %}:</strong></p>
+	<div class="well " style="background-color: #fcf8e3;">
+		<p><a href="{{ request.META.HTTP_HOST }}{{ previous.previous_question.get_admin_url }}" target="_blank" > {% trans "Modificar pregunta" %} </a></p>
+	</div>
+
+	<hr>
+
 
   {% endif %}
 
@@ -45,7 +67,11 @@
 
 	{% endif %}
 
+
 	<p>{% trans "Review the questions below and try the exam again in the future"%}.</p>
+	<div class="well" style="background-color: #fcf8e3;">
+		<p><a href="{{url_parts.protocol}}{{url_parts.domain}}/marking/{{sitting.id}}/" target="_self" > {% trans "Revisar respuestas" %} </a></p>
+	</div>
 
 	{% if user.is_authenticated %}
 
@@ -97,3 +123,4 @@
 
 
 {% endblock %}
+

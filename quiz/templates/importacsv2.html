@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% load quiz_tags %}
+{% load static %}
+{% load widget_tweaks %}
+
+
+{% block title %} {% trans "Progress Page" %} {% endblock %}
+{% block description %} {% trans "User Progress Page" %} {% endblock %}
+
+{% block messages %}
+    <div class="alert alert-error">
+  	  <strong>{% trans "Has respondido incorrectamente" %}</strong>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+<h2>{% trans "Carga de test" %}</h2>
+	<form id='formulario' method='POST' enctype='multipart/form-data' class="form-horizontal" action=''>
+		{% csrf_token %}
+
+		{% for hidden_field in form.hidden_fields %}
+    		{{ hidden_field }}
+  		{% endfor %}
+
+		{{ formulario.non_field_errors }}
+		<div class="form-group" style="margin-bottom:10px;">
+			<div class="row">
+                <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-3">
+                    {{ formulario.nuevoTest.errors }}
+                    <label for="{{ formulario.nuevoTest.id_for_label }}">Nuevo test:</label>
+                     {{ formulario.nuevoTest |add_class:'form-control'}}
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-xs-12">
+                    {{ formulario.test.errors }}
+                    <label for="{{ formulario.test.id_for_label }}">Test existente:</label>
+                     {{ formulario.test |add_class:'form-control'}}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-9 col-xs-12">
+                    {{ formulario.categoria.errors }}
+                    <label for="{{ formulario.categoria.id_for_label }}">Categoria:</label>
+                    {{ formulario.categoria |add_class:'form-control'}}
+                </div>
+            </div>
+            <div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-9 col-xs-12">
+				{{ formulario.subcategoria.errors }}
+				<label for="{{ formulario.subcategoria.id_for_label }}">Subcategoria:</label>
+				{{ formulario.subcategoria |add_class:'form-control'}}
+			</div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-9 col-xs-12">
+                    {{ formulario.encapsulado.errors }}
+                    <label for="{{ formulario.encapsulado.id_for_label }}">Encapsulado de datos</label>
+                     {{ formulario.encapsulado |add_class:'form-control'}}
+                </div>
+            </div>
+            <div class="row">
+			<div class="col-lg-6 col-md-6 col-sm-9 col-xs-12">
+				{{ formulario.archivo.errors }}
+				<label for="{{ formulario.archivo.id_for_label }}">Archivo:</label>
+				{{ formulario.archivo |add_class:'form-control'}}
+
+			</div>
+		</div>
+        <p/>
+		<div class="form-group" sp>
+			<div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-3" style="margin-bottom:10px;">
+			    <span class="glyphicon glyphicon-ok">
+                <p><input type='submit' value='Confirmar' class="btn btn-success"></p>
+                </span>
+			</div>
+		</div>
+	</form>
+{% endblock %}

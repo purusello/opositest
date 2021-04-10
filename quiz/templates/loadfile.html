@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% load quiz_tags %}
+{% load static %}
+
+{% block title %} {% trans "Progress Page" %} {% endblock %}
+{% block description %} {% trans "User Progress Page" %} {% endblock %}
+
+{% block messages %}
+    <div class="alert alert-error">
+  	  <strong>{% trans "You answered the above question incorrectly" %}</strong>
+    </div>
+{% endblock %}
+
+{% block content %}
+
+<h2>{% trans "Carga de ficheros" %}</h2>
+
+{% if messages %}
+    {% for message in messages %}
+      <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+        {{ message }}
+      </div>
+    {% endfor %}
+{% endif %}
+
+<form action="{% url "upload_csv" %}" method="POST" enctype="multipart/form-data" class="form-horizontal">
+{% csrf_token %}
+<div class="form-group">
+    <label form="leer"  class="col-md-3 col-sm-3 col-xs-12 control-label"></span>{% trans "CSV File:" %}</label>
+    <div class="col-md-6">
+        <input type="file" name="csv_file" id="csv_file" required="True" class="form-control">
+    </div>
+</div>
+<div class="form-group">
+    <div class="col-md-3 col-sm-3 col-xs-12 col-md-offset-3" style="margin-bottom:10px;">
+         <button class="btn btn-primary"> <span class="glyphicon glyphicon-upload" style="margin-right:5px;"></span>{% trans "Upload" %} </button>
+    </div>
+</div>
+</form>
+
+
+{% endblock %}

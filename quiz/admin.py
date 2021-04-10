@@ -3,11 +3,12 @@ from django.contrib import admin
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.utils.translation import ugettext_lazy as _
 
-from .models import Quiz, Category, SubCategory, Progress, Question
+from .models import Quiz, Category, SubCategory, Progress, Question, Sitting
 from multichoice.models import MCQuestion, Answer
 from true_false.models import TF_Question
 from essay.models import Essay_Question
 
+from django.core.cache import cache
 
 class AnswerInline(admin.TabularInline):
     model = Answer
@@ -25,8 +26,17 @@ class QuizAdminForm(forms.ModelForm):
         model = Quiz
         exclude = []
 
+    # Check if the result is already cached
+    questions_results = cache.get('questions_results') # Returns None if not cached earlier
+
+    # If the result is None, then query the database and set the cache
+    if questions_results is None:
+        questions_results = Question.objects.all()
+        cache.set('questions_results', questions_results)
+
+
     questions = forms.ModelMultipleChoiceField(
-        queryset=Question.objects.all().select_subclasses(),
+        queryset=questions_results,#Question.objects.all().select_subclasses(),
         required=False,
         label=_("Questions"),
         widget=FilteredSelectMultiple(
@@ -46,13 +56,35 @@ class QuizAdminForm(forms.ModelForm):
         self.save_m2m()
         return quiz
 
+def create_new_test(modeladmin, request, queryset):
+    for quiz in queryset:
+        from datetime  import datetime
+        ahora = datetime.now()
+        fecha = ahora.strftime("%Y-%m-%d %H-%M:%S")
+
+        q = Quiz(title= fecha  + ' Test automatico', url='testauto'+fecha,
+                 category=quiz.category,
+                 random_order=True,
+                 answers_at_end=False,
+                 exam_paper=True,
+                 single_attempt=False
+                 )
+        break
+    q.save()
+    for quiz in queryset:
+        for question in quiz.get_questions():
+            question.quiz.add(q)
+
+
+    create_new_test.short_description = 'Crear test basado en test seleccionados'
 
 class QuizAdmin(admin.ModelAdmin):
     form = QuizAdminForm
 
     list_display = ('title', 'category', )
     list_filter = ('category',)
-    search_fields = ('description', 'category', )
+    search_fields = ('title', )
+    actions = [create_new_test, ]
 
 
 class CategoryAdmin(admin.ModelAdmin):
@@ -66,8 +98,8 @@ class SubCategoryAdmin(admin.ModelAdmin):
 
 
 class MCQuestionAdmin(admin.ModelAdmin):
-    list_display = ('content', 'category', )
-    list_filter = ('category',)
+    list_display = ('content', 'category','sub_category' )
+    list_filter = ('category','sub_category','quiz')
     fields = ('content', 'category', 'sub_category',
               'figure', 'quiz', 'explanation', 'answer_order')
 
@@ -102,6 +134,12 @@ class EssayQuestionAdmin(admin.ModelAdmin):
     search_fields = ('content', 'explanation')
     filter_horizontal = ('quiz',)
 
+
+class SittingAdmin(admin.ModelAdmin):
+    list_display =('user','quiz', 'start','end','current_score')
+    list_filter = ('complete',)
+    search_fields = ('user__username','quiz__title',)
+
 admin.site.register(Quiz, QuizAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(SubCategory, SubCategoryAdmin)
@@ -109,3 +147,7 @@ admin.site.register(MCQuestion, MCQuestionAdmin)
 admin.site.register(Progress, ProgressAdmin)
 admin.site.register(TF_Question, TFQuestionAdmin)
 admin.site.register(Essay_Question, EssayQuestionAdmin)
+
+
+
+admin.site.register(Sitting, SittingAdmin)

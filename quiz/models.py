@@ -9,7 +9,8 @@ from django.core.validators import (
 )
 from django.utils.translation import ugettext_lazy as _
 from django.utils.timezone import now
-from django.utils.encoding import python_2_unicode_compatible
+from six import python_2_unicode_compatible
+#from django.utils.encoding import python_2_unicode_compatible
 from django.conf import settings
 
 from model_utils.managers import InheritanceManager
@@ -569,7 +570,7 @@ class Question(models.Model):
                                null=True,
                                verbose_name=_("Figure"))
 
-    content = models.CharField(max_length=1000,
+    content = models.TextField(max_length=1000,
                                blank=False,
                                help_text=_("Enter the question text that "
                                            "you want displayed"),
@@ -590,4 +591,4 @@ class Question(models.Model):
         ordering = ['category']
 
     def __str__(self):
-        return self.content
+        return "%s (#%s - %s)" % (self.content, self.category, self.sub_category)
