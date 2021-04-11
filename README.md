@@ -1,13 +1,12 @@
-Django quiz app
+Django OposiTest app
 ===============
-[![Build Status](https://travis-ci.org/tomwalker/django_quiz.svg?branch=master)](https://travis-ci.org/tomwalker/django_quiz)
 
 This is a configurable quiz app for Django.
 
-My websites have used twitter bootstrap for the front end and I have tried to strip out anything from
+This websites have used twitter bootstrap for the front end and I have tried to strip out anything from
 the template files that are dependant on bootstrap.
 
-![Questions](http://i.imgur.com/VRYx3OV.png "Question picture hosted by Imgur")
+![Questions](https://imgur.com/kyKYyUs "Question picture hosted by Imgur")
 
 
 Current features
