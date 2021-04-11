@@ -32,7 +32,7 @@ Features of each quiz:
 * After selecting a larger pool of questions, a quiz can be set to show a random subset rather than all within the pool
 * Start and end times for sitting exams are recorded
 * i18n support
-* Russian and Italian language translation
+* Spanish, Russian and Italian language translation
 * Import and export Multichoice Test in csv format
 * Export Multichoice test in pdf format
 * Modification of question cab be done after answer them. (admin profile)
