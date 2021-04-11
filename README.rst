@@ -22,18 +22,32 @@ Current features
 * Custom message displayed for those that pass or fail a quiz
 * Custom permission (view_sittings) added, allowing users with that permission to view quiz results from users
 * A marking page which lists completed quizzes, can be filtered by quiz or user, and is used to mark essay questions
+* Spanish, Russian and Italian language translation
+* Import and export Multichoice Test in csv format
+* Export Multichoice test in pdf format
+* Modification of question cab be done after answer them. (admin profile)
+
+
 
 
 Requirements
 ------------
-
 django-model-utils
+
+Pillow
+
+Wheel
+
+ReportLab
+
+Tests are included and pass for Django versions 1.5, 1.6, 1.7 and 1.8, running with Python 2.7, 3.3 and 3.4
+
 
 
 Installation
 ------------
 
-  git clone https://github.com/tomwalker/django_quiz.git
+  git clone https://github.com/purusello/opositest.git
 
   pip install -r requirements.txt
 
@@ -56,7 +70,7 @@ for whatever you want the quiz base url to be.
       ...
   )
 
-MIT License (MIT) Copyright (c) 2012 - 2014 Dr Tom Walker
+MIT License (MIT) Copyright (c) 2019 - 2020 Lcd. Joseo Carrasco
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
