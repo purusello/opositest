@@ -6,7 +6,7 @@ This is a configurable quiz app for Django.
 This websites have used twitter bootstrap for the front end and I have tried to strip out anything from
 the template files that are dependant on bootstrap.
 
-![Questions](https://imgur.com/kyKYyUs "Question picture hosted by Imgur")
+![Questions](https://imgur.com/kyKYyUs.png "Question picture hosted by Imgur")
 
 
 Current features
