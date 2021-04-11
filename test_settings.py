@@ -35,11 +35,11 @@ CACHES = {
 # timezone as the operating system.
 # If running in a Windows environment this must be set to the same as your
 # system time zone.
-TIME_ZONE = 'Europe/London'
+TIME_ZONE = 'Europe/Madrid'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'en-uk'
+LANGUAGE_CODE = 'es-ES'
 
 SITE_ID = 1
 
@@ -61,7 +61,7 @@ MEDIA_ROOT = ''
 MEDIA_URL = ''
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = 'boing!'
+SECRET_KEY = 'CambiaEstaPalabra!'
 
 TEMPLATES = [
     {
