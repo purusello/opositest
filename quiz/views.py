@@ -11,7 +11,7 @@ from django.contrib import messages
 
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import QuestionForm, EssayForm, CargarTestForm, ExportarTestForm, ExportarTestPDFForm
+from .forms import QuestionForm, EssayForm, CargarTestForm, ExportarTestForm, ExportarTestPDFForm, CargarTestJSONForm
 from .models import Quiz, Category, Progress, Sitting, Question
 from essay.models import Essay_Question
 from multichoice.models import  Answer, MCQuestion
@@ -29,9 +29,10 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import inch
 from cgi import escape
 
-from datetime import datetime
+#from datetime import datetime
 
 import codecs
+import json
 
 
 
@@ -140,6 +141,7 @@ class QuizMarkingList(QuizMarkerMixin, SittingFilterTitleMixin, ListView):
 
         queryset = queryset.filter(user=self.request.user)
 
+        # Filter by user. I comment it that user only can see his Mark
         #user_filter = self.request.GET.get('user_filter')
         #if user_filter:
         #    queryset = queryset.filter(user__username__icontains=user_filter)
@@ -452,66 +454,6 @@ def handle_uploaded_file(f):
         for chunk in f.chunks():
             destination.write(chunk)
 
-# @login_required(login_url='/login' )
-# def upload_csv(request):
-#
-#
-#     data = {}
-#     if "GET" == request.method:
-#         return render(request, "loadfile.html", data)
-#     # if not GET, then proceed
-#     try:
-#         csv_file = request.FILES["csv_file" ]
-#         if not csv_file.name.endswith('.csv'):
-#             messages.error(request, 'El archivo no es tipo csv')
-#             return HttpResponseRedirect(reverse("upload_csv"))
-#         # if file is too large, return
-#         if csv_file.multiple_chunks():
-#             messages.error(request, "Archivo demasiado grande (%.2f MB)." % (csv_file.size / (1000 * 1000),))
-#             return HttpResponseRedirect(reverse("upload_csv"))
-#
-#         # file_data = csv_file.read().decode("utf-8")
-#         #
-#         # lines = file_data.split("\n")
-#         # loop over the lines and save them in db. If error , store as string and then display
-#
-#         reader = csv.DictReader(io.StringIO(csv_file.read().decode('utf-8')),delimiter=';', quotechar='|')
-#         for row in reader:
-#             try:
-#                 m = MCQuestion(content=row['pregunta'])
-#                 c1 = Answer(content=row['r1'])
-#                 c2 = Answer(content=row['r2'])
-#                 c3 = Answer(content=row['r3'])
-#                 c4 = Answer(content=row['r4'])
-#                 if row['correcta'] == "1":
-#                     c1.correct = True
-#                 elif row['correcta'] == "2":
-#                     c2.correct = True
-#                 elif row['correcta'] == "3":
-#                     c3.correct = True
-#                 elif row['correcta'] == "4":
-#                     c4.correct = True
-#                 m.answer_order='random'
-#                 m.save()
-#                 c1.question = m
-#                 c2.question = m
-#                 c3.question = m
-#                 c4.question = m
-#                 c1.save()
-#                 c2.save()
-#                 c3.save()
-#                 c4.save()
-#             except Exception as e:
-#                 messages.error(request, "Error importando pregunta " + repr(e))
-#                 return HttpResponseRedirect(reverse("upload_csv"))
-#         messages.info(request, "Fichero cargado correctamente")
-#
-#     except Exception as e:
-#         # logging.getLogger("error_logger").error("Unable to upload file. " + repr(e))
-#         messages.error(request, "Unable to upload file. " + repr(e))
-#         print("Error--> "+ repr(e))
-#
-#     return HttpResponseRedirect(reverse("upload_csv"))
 
 def index(request):
     return render(request, 'index.html', {})
@@ -635,6 +577,103 @@ def importarCSV(request):
     context = {'formulario': formulario}
     return render(request, 'importacsv2.html',context)
 
+@login_required(login_url='/login' )
+def importarJSON(request):
+
+
+    if request.method=='POST':
+        formulario = CargarTestJSONForm(request.POST, request.FILES)
+
+        if formulario.is_valid():
+            if not (formulario.cleaned_data['test'] or formulario.cleaned_data['nuevoTest']):
+                messages.error(request, 'Debe seleccionar un test o introducir un nombre para uno nuevo')
+                return HttpResponseRedirect(reverse("importarJSON"))
+            json_file = request.FILES['archivo']
+
+            if not json_file.name.endswith('.json'):
+                messages.error(request, 'El archivo no es tipo Json')
+                return HttpResponseRedirect(reverse("importarJSON"))
+            # if file is too large, return
+            if json_file.multiple_chunks():
+                messages.error(request, "Archivo demasiado grande (%.2f MB)." % (csv_file.size / (1000 * 1000),))
+                return HttpResponseRedirect(reverse("importarJSON"))
+
+            if (formulario.cleaned_data['test']):
+                q = formulario.cleaned_data['test']
+            else:
+                q = Quiz(title=formulario.cleaned_data['nuevoTest'], url=formulario.cleaned_data['nuevoTest'],
+                         category=formulario.cleaned_data['categoria'],
+                         random_order=True,
+                         answers_at_end=False,
+                         exam_paper=True,
+                         single_attempt=False
+                         )
+                q.save()
+
+            #reader = csv.DictReader(io.StringIO(json_file.read().decode('utf-8-sig')), delimiter=';',
+            #                        quotechar=formulario.cleaned_data['encapsulado'])           #'|')
+            #for row in reader:
+            print(json_file)
+
+            try:
+                data = json.load(json_file)
+                for preg in data['preguntas']:
+                    print('Pregunta:', preg['pregunta'])
+                    print('Respuesta:', preg['respuesta'])
+                    print('Explicación:', preg['explicacion'])
+                    print('')
+
+                    m = MCQuestion(content=preg['pregunta'])
+                    m.save()
+                    m.quiz.add(q)
+
+
+
+                    c1 = Answer(content=preg['opciones'][0])
+                    c2 = Answer(content=preg['opciones'][1])
+                    c3 = Answer(content=preg['opciones'][2])
+                    c4 = Answer(content=preg['opciones'][3])
+
+                    if preg['respuesta'] == 1:
+                        c1.correct = True
+                    elif preg['respuesta'] == 2:
+                        c2.correct = True
+                    elif preg['respuesta'] == 3:
+                        c3.correct = True
+                    elif preg['respuesta'] == 4:
+                        c4.correct = True
+
+                    m.answer_order = 'random'
+
+                    m.explanation =  preg['explicacion']
+
+                    c1.question = m
+                    c2.question = m
+                    c3.question = m
+                    c4.question = m
+
+
+                    m.category = formulario.cleaned_data['categoria']
+                    m.sub_category = formulario.cleaned_data['subcategoria']
+                    m.save()
+                    c1.save()
+                    c2.save()
+                    c3.save()
+                    c4.save()
+            except Exception as e:
+                messages.error(request, "Error importando pregunta " + repr(e))
+                return HttpResponseRedirect(reverse("importarJSON"))
+
+
+            messages.info(request, "Fichero cargado correctamente")
+
+
+    else:
+
+        formulario = CargarTestJSONForm()
+
+    context = {'formulario': formulario}
+    return render(request, 'importacsv2.html',context)
 
 @login_required(login_url='/login' )
 def exportarTestCSV(request):

@@ -42,7 +42,22 @@ class CargarTestForm(forms.Form):
     encapsulado = forms.ChoiceField(label="Encapsulador", choices=ENCAPSULADO, required=True)
     archivo = forms.FileField()
 
+class CargarTestJSONForm(forms.Form):
 
+
+    listaCategorias = Category.objects.all().order_by('category')
+    listaSubcategorias = SubCategory.objects.all().order_by('sub_category')
+    listaTest = Quiz.objects.all().order_by('title')
+
+
+
+
+    nuevoTest = forms.CharField(required=False)
+    test = forms.ModelChoiceField(label="Test existente", queryset=listaTest, required=False)
+    categoria = forms.ModelChoiceField(label="Categoría", queryset=listaCategorias)
+    subcategoria = forms.ModelChoiceField(label="Subcategoría", queryset=listaSubcategorias)
+    #encapsulado = forms.ChoiceField(label="Encapsulador", choices=ENCAPSULADO, required=True)
+    archivo = forms.FileField()
 
 class ExportarTestForm(forms.Form):
 

@@ -13,7 +13,7 @@ from django.conf import settings
 from .views import QuizListView, CategoriesListView, \
     ViewQuizListByCategory, QuizUserProgressView, QuizMarkingList, \
     QuizMarkingDetail, QuizDetailView, QuizTake, index, login_user, logout_user, importarCSV, \
-    exportarTestCSV, exportarTestPDF, QuizMarkingListOrder
+    exportarTestCSV, exportarTestPDF, QuizMarkingListOrder, importarJSON
 
 
 urlpatterns = [
@@ -36,7 +36,10 @@ urlpatterns = [
 
     url(r'^cargacsv/$', view=importarCSV, name='importarCSV'),
 
+    url(r'^cargajson/$', view=importarJSON, name='importarJSON'),
+
     url(r'^exportacsv/$', view=exportarTestCSV, name='exportarTestCSV'),
+
 
     url(r'^exportapdf/$', view=exportarTestPDF, name='exportarTestPDF'),
 

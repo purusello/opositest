@@ -34,27 +34,47 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav rm-auto">
         {% if user.is_authenticated %}
-        <li class="nav-tem" style="color:gray">
-          <a href="{% url 'quiz_index' %}" class="nav-link">{% trans "Test" %}</a>
-        </li>
-        <li class="nav-tem" style="color:gray">
-            <a href="{% url 'quiz_progress' %}" class="nav-link">{% trans "Progreso" %}</a>
-          </li>
-        <li class="nav-tem" style="color:gray">
-            <a href="{% url 'quiz_marking' %}" class="nav-link">{% trans "Revisión" %}</a>
-        </li>
-        <li class="nav-tem" style="color:gray">
-            <a href="{% url 'importarCSV' %}" class="nav-link">{% trans "Subir CSV" %}</a>
-        </li>
-        <li class="nav-tem" style="color:gray">
-            <a href="{% url 'exportarTestCSV' %}" class="nav-link">{% trans "Descargar Test CSV" %}</a>
-        </li>
-        <li class="nav-tem" style="color:gray">
-            <a href="{% url 'exportarTestPDF' %}" class="nav-link">{% trans "Descargar Test PDF" %}</a>
-        </li>
-        <li class="nav-tem" style="color:gray">
-            <a href="{% url 'admin:index' %}" class="nav-link">{% trans "Administración" %}</a>
-        </li>
+            <li class="nav-tem" style="color:gray">
+              <a href="{% url 'quiz_index' %}" class="nav-link">{% trans "Test" %}</a>
+            </li>
+            <li class="nav-tem" style="color:gray">
+                <a href="{% url 'quiz_progress' %}" class="nav-link">{% trans "Progreso" %}</a>
+              </li>
+            <li class="nav-tem" style="color:gray">
+                <a href="{% url 'quiz_marking' %}" class="nav-link">{% trans "Revisión" %}</a>
+            </li>
+
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {% trans "Importar Test" %}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a href="{% url 'importarCSV' %}" class="dropdown-item">{% trans "Archivo en formato CSV" %}</a>
+                  <a href="{% url 'importarJSON' %}" class="dropdown-item">{% trans "Archivo en formato JSON" %}</a>
+                </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  {% trans "Exportar Test" %}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                  <a href="{% url 'exportarTestCSV' %}" class="dropdown-item">{% trans "Descargar Test en formato CSV" %}</a>
+                  <a href="{% url 'exportarTestCSV' %}" class="dropdown-item">{% trans "Descargar Test en formato JSON" %}</a>
+                  <div class="dropdown-divider"></div>
+                  <a href="{% url 'exportarTestPDF' %}" class="dropdown-item">{% trans "Descargar Test en documento PDF" %}</a>
+                </div>
+            </li>
+
+
+
+
+            {% if user.is_staff %}
+                <li class="nav-tem" style="color:gray">
+                    <a href="{% url 'admin:index' %}" class="nav-link">{% trans "Administración" %}</a>
+                </li>
+            {% endif %}
         {% endif %}
 
       </ul>
