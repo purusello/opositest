@@ -121,6 +121,7 @@ INSTALLED_APPS = (
     'multichoice',
     'true_false',
     'essay',
+    'widget_tweaks',
 )
 
 

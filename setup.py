@@ -38,7 +38,8 @@ setup(
         'setuptools>=41.2',
         'sqlparse>=0.3',
         'pytz>=2019.2',
-        'wheel>=0.33.6'
+        'wheel>=0.33.6',
+        'django-widget-tweaks >=1.0'
     ],
     test_suite='runtests.runtests'
 )
