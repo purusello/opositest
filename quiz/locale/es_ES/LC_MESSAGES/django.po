@@ -370,6 +370,14 @@ msgstr "Completado"
 msgid "User answer"
 msgstr "Respuesta de usuario"
 
+#: templates/quiz/sitting_detail.html:23
+msgid "Correct answer"
+msgstr "Respuesta correcta"
+
+#: templates/quiz/sitting_detail.html:24
+msgid "Question Result"
+msgstr "Resultado de respuesta"
+
 #: templates/quiz/sitting_detail.html:41
 msgid "incorrect"
 msgstr "Incorrecta"
