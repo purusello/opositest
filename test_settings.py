@@ -19,8 +19,13 @@ DATABASES = {
         'PASSWORD': 'clave5test4',                  # Not used with sqlite3.
         'HOST': 'jilguero.mysql.pythonanywhere-services.com',                      # Set to empty string for localhost. Not used with sqlite3.
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+        'OPTIONS': {
+            'init_command': "SET sql_mode='STRICT_TRANS_TABLES'",
+        },        
     }
 }
+
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 CACHES = {
     'default': {
@@ -77,6 +82,7 @@ TEMPLATES = [
                 'django.template.context_processors.static',
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.request',
             ],
         },
     },
