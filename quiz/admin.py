@@ -14,13 +14,15 @@ class AnswerInline(admin.TabularInline):
     model = Answer
 
 
-class QuizAdminForm(forms.ModelForm):
     """
     below is from
     http://stackoverflow.com/questions/11657682/
     django-admin-interface-using-horizontal-filter-with-
     inline-manytomany-field
     """
+
+
+class QuizAdminForm(forms.ModelForm):
 
     class Meta:
         model = Quiz
