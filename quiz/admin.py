@@ -32,8 +32,10 @@ class QuizAdminForm(forms.ModelForm):
     # If the result is None, then query the database and set the cache
     if questions_results is None:
         questions_results = Question.objects.all()
-        cache.set('questions_results', questions_results)
-
+        try:
+            cache.set('questions_results', questions_results)
+        except:
+            print("se ha producido exception en question_result")
 
     questions = forms.ModelMultipleChoiceField(
         queryset=questions_results,#Question.objects.all().select_subclasses(),

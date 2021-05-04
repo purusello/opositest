@@ -613,15 +613,15 @@ def importarJSON(request):
             #reader = csv.DictReader(io.StringIO(json_file.read().decode('utf-8-sig')), delimiter=';',
             #                        quotechar=formulario.cleaned_data['encapsulado'])           #'|')
             #for row in reader:
-            print(json_file)
+            #print(json_file)
 
             try:
                 data = json.load(json_file)
                 for preg in data['preguntas']:
-                    print('Pregunta:', preg['pregunta'])
-                    print('Respuesta:', preg['respuesta'])
-                    print('Explicación:', preg['explicacion'])
-                    print('')
+                    #print('Pregunta:', preg['pregunta'])
+                    #print('Respuesta:', preg['respuesta'])
+                    #print('Explicación:', preg['explicacion'])
+                    #print('')
 
                     m = MCQuestion(content=preg['pregunta'])
                     m.save()
